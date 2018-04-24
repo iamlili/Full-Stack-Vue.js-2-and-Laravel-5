@@ -2,21 +2,27 @@
 
 import Vue from 'vue';
 import sample from './data'; /* While Laravel has opted to use CommonJS syntax for including modules, that is require, we will use native ES module syntax, that is import. This is because ES modules are making their way into the JavaScript standard, and it's more consistent with the syntax used by Vue. */
+import "core-js/fn/object/assign";
 
 var app = new Vue({
     el: '#app',
-    data: {
-        title: sample.title,
-        address: sample.address,
-        about: sample.about,
+
+    /* Instead of manually assigning the properties below with the same name from the sample object
+    we can use Object.assign and merge the two objects.
+    Then add a pollyfill to ensure code will run in old browsers, by installing the core-js dependency, a library of polyfills */
+    data: Object.assign(sample, {
+        // title: sample.title,
+        // address: sample.address,
+        // about: sample.about,
+        // amenities: sample.amenities,
+        // prices: sample.prices,
+
         headerImageStyle: {
             'background-image': 'url(/images/header.jpg)'
         },
-        amenities: sample.amenities,
-        prices: sample.prices,
         contracted: true,
         modalOpen: false
-    },
+    }),
     
     /*  We want to prevent bkg scrolling when the modal is open, so we need to add overflow hidden on the body tag
         Vue can't update the body tag because it only has dominion over the element it's mounted on eg '#app'
