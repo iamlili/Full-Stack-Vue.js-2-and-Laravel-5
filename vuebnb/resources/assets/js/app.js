@@ -1,24 +1,21 @@
 
 
 import Vue from 'vue';
-import sample from './data'; /* While Laravel has opted to use CommonJS syntax for including modules, that is require, we will use native ES module syntax, that is import. This is because ES modules are making their way into the JavaScript standard, and it's more consistent with the syntax used by Vue. */
+//import sample from './data'; /* While Laravel has opted to use CommonJS syntax for including modules, that is require, we will use native ES module syntax, that is import. This is because ES modules are making their way into the JavaScript standard, and it's more consistent with the syntax used by Vue. */
 import "core-js/fn/object/assign";
+import { populateAmenitiesAndPrices } from './helpers'; // we import a helper function to structure the model (from the database) into the format we want, ie amenities and prices as arrays (as per original object from data.js file)
+
+let model = JSON.parse(window.vuebnb_listing_model);
+model = populateAmenitiesAndPrices(model);
 
 var app = new Vue({
     el: '#app',
 
-    /* Instead of manually assigning the properties below with the same name from the sample object
-    we can use Object.assign and merge the two objects.
-    Then add a pollyfill to ensure code will run in old browsers, by installing the core-js dependency, a library of polyfills */
-    data: Object.assign(sample, {
-        // title: sample.title,
-        // address: sample.address,
-        // about: sample.about,
-        // amenities: sample.amenities,
-        // prices: sample.prices,
-
+    /* Instead of manually assigning the properties below with the same name from another object
+    we can use Object.assign and merge the two objects. Then add a pollyfill to ensure code will run in old browsers, by installing the core-js dependency, a library of polyfills */
+    data: Object.assign(model, {
         headerImageStyle: {
-            'background-image': 'url(/images/header.jpg)'
+            'background-image': `url(${model.images[0]})`
         },
         contracted: true,
         modalOpen: false
