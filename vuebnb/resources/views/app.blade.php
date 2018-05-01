@@ -8,6 +8,7 @@
 <!--   <link rel="stylesheet" href="node_modules/open-sans-all/css/open-sans.css">
   <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css"> -->
   <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ asset('css/vue-style.css') }}" type="text/css">  
   <script type="text/javascript">
       console.log({{ $model[ 'id' ] }});
 
@@ -32,7 +33,7 @@
 </div>
 <div id="app">
   <div class="header">
-      <div class="header-img" v-bind:style="headerImageStyle" v-on:click="modalOpen = true">
+      <div class="header-img" v-bind:style="headerImageStyle" v-on:click="openModal">
         <button class="view-photos">View Photos</button>
       </div>
   </div>
@@ -73,12 +74,9 @@
       </div>
     </div>
   </div>
-  <div id="modal" v-bind:class="{ show : modalOpen }">
-    <button v-on:click="modalOpen = false" class="modal-close">&times;</button>
-    <div class="modal-content">
-      <image-carousel v-bind:images="images"></image-carousel>
-    </div>
-  </div>
+  <modal-window ref="imagemodal"> <!-- 'ref' is a special property allowing you to reference a child component's data. To use it: declare it and assign a unique value. Now the root instance has access to this specific ModalWindow components data via the $refs object. -->
+      <image-carousel v-bind:images="images"></image-carousel> <!-- Note: image-carousel is a sibling of modal-window (not a child) because of the use of the slot -->
+  </modal-window>
 </div>
 <!-- <script src="node_modules/vue/dist/vue.js"></script>
 <script src="sample/data.js"></script>
