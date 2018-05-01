@@ -8,6 +8,67 @@ import { populateAmenitiesAndPrices } from './helpers'; // we import a helper fu
 let model = JSON.parse(window.vuebnb_listing_model);
 model = populateAmenitiesAndPrices(model);
 
+
+//Props allow us to send data into (and out of) a component though the html. They allow components to communicate with other parts of the app.        
+
+Vue.component('image-carousel', {
+    template:   `<div class="image-carousel">
+                    <img v-bind:src="image"/>
+                    <div class="controls">
+                        <carousel-control dir="left" v-on:change-image="changeImage"></carousel-control>
+                        <carousel-control dir="right" v-on:change-image="changeImage" ></carousel-control>
+                    </div>
+                </div>`,
+
+    //instead of the hard coded returned array below we declare 'images' a prop, and let the root instance pass in the image URLS. The image-carousel componenet will just be resonsible for displaying them
+    props: ['images'],
+    data() {
+        return {
+            // images: [
+            //     '/images/1/Image_1.jpg',
+            //     '/images/1/Image_2.jpg',
+            //     '/images/1/Image_3.jpg',
+            //     '/images/1/Image_4.jpg'
+            // ],
+            index: 0
+        }
+    },
+    computed: { // computed properties: can be thought of as reactive methods which are rerun whenever a deventent value is changed.
+        image() {
+            return this.images[this.index];
+        }
+    },
+    methods: {
+        changeImage(val){         
+            let newVal = this.index + parseInt(val);
+            if (newVal < 0) {
+                this.index = this.images.length -1;
+            } else if (newVal === this.images.length) {
+                this.index = 0;
+            } else {
+                this.index = newVal;
+            }
+        }
+    },
+    components: {
+        'carousel-control': {
+            //template: `<i class="carousel-control fa fa-2x fa-chevron-left"></i>`,
+            template: `<i :class="classes" @click ="clicked" ></i>`, // as a shorthand we can just use : instead of v-bind: // Also for v-on we can simply replace v-on with @
+            props: [ 'dir' ],
+            computed: {
+                classes() {
+                    return 'carousel-control fa fa-2x fa-chevron-' + this.dir;
+                }
+            },
+            methods: {
+                clicked() {
+                    this.$emit('change-image', this.dir === 'left' ? -1 : 1); // custom events can be emmitted from a child component and listened to by its parent. To do this we use the $emit instance in the child, first arg is the event name, then the remaining arbitrary number of additional args is used for any data to be sent with the event. The parent can then use the v-on directive to listen to this event.
+                }
+            }
+        }
+    }
+});
+
 var app = new Vue({
     el: '#app',
 
