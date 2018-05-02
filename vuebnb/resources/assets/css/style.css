@@ -46,67 +46,14 @@ body {
   font-size: 15px;
   color: #767676;
 }
-hr {
-  border: 0;
-  border-top: 1px solid #dce0e0;
-}
+
 .about {
   margin-top: 2em;
 }
 .about h3 {
   font-size: 22px;
 }
-.about p {
-  white-space: pre-wrap;
-}
 
-.header {
-  height: 320px;
-}
-.header .header-img {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50% 50%;
-  background-color: #f5f5f5;
-  height: 100%;
-}
-
-.list {
-  display: flex;
-  flex-wrap: nowrap;
-  margin: 2em 0;
-}
-.list .title {
-  flex: 1 1 25%;
-}
-.list .content {
-  flex: 1 1 75%;
-  display: flex;
-  flex-wrap: wrap;
-}
-.list .list-item {
-  flex: 0 0 50%;
-  margin-bottom: 16px;
-}
-.list .list-item > i {
-  width: 35px;
-}
-@media (max-width: 743px) {
-  .list .title {
-    flex: 1 1 33%;
-  }
-  .list .content {
-      flex: 1 1 67%;
-  }
-  .list .list-item {
-      flex: 0 0 100%;
-  }
-}
-
-.about p.contracted {
-  height: 250px;
-  overflow: hidden;
-}
 
 button {
   text-align: center;
@@ -116,45 +63,4 @@ button {
   cursor: pointer;
   display: inline-block;
   margin-bottom: 0;
-}
-.about button.more {
-  background: transparent;
-  border: 0;
-  color: #008489;
-  padding: 0;
-  font-size: 17px;
-  font-weight: bold;
-}
-.about button.more:hover,
-.about button.more:focus,
-.about button.more:active {
-  text-decoration: underline;
-  outline: none;
-}
-
-.header .header-img {
-  cursor: pointer;
-  position: relative;
-}
-button {
-  border-radius: 4px;
-  border: 1px solid #c4c4c4;
-  text-align: center;
-  vertical-align: middle;
-  font-weight: bold;
-  line-height: 1.43;
-  user-select: none;
-  white-space: nowrap;
-  cursor: pointer;
-  background: white;
-  color: #484848;
-  padding: 7px 18px;
-  font-size: 14px;
-  display: inline-block;
-  margin-bottom: 0;
-}
-.header .header-img .view-photos {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
 }

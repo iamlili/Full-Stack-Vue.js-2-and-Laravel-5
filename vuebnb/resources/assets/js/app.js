@@ -8,9 +8,11 @@ import { populateAmenitiesAndPrices } from './helpers'; // we import a helper fu
 let model = JSON.parse(window.vuebnb_listing_model);
 model = populateAmenitiesAndPrices(model);
 
+import HeaderImage from '../components/HeaderImage.vue';
 import ImageCarousel from '../components/ImageCarousel.vue';
 import ModalWindow from '../components/ModalWindow.vue';
-
+import FeatureList from '../components/FeatureList.vue';
+import ExpandableText from '../components/ExpandableText.vue';
 
 var app = new Vue({
     el: '#app',
@@ -18,15 +20,15 @@ var app = new Vue({
     /* Instead of manually assigning the properties below with the same name from another object
     we can use Object.assign and merge the two objects. Then add a pollyfill to ensure code will run in old browsers, by installing the core-js dependency, a library of polyfills */
     data: Object.assign(model, {
-        headerImageStyle: {
-            'background-image': `url(${model.images[0]})`
-        },
-        contracted: true
+        
     }),
 
     components: {
+        HeaderImage,
         ModalWindow,
-        ImageCarousel
+        ImageCarousel,
+        FeatureList,
+        ExpandableText
     },
 
     /* Now that we've decoupled the modal window from the main app, we need a method of sending data from the main app to the component to open the modal ie. when we click on the header image
