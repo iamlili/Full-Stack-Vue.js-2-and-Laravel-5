@@ -34,3 +34,22 @@ mix.options({
 });
 
 
+/* There are different builds of vue (see in the vue dist folder), eg Full Builds (which include a template compiler) or Runtime-only builds,
+ * aswell as some that use a different module pattern eg CommonJs or as we have using used thoughout our app the ES Module pattern (importing files with es6 syntax)
+ * The default that Mix uses is the vue.common.js build (which is a Full build)
+ * But now that we have converted all out components into SFC including the main app template we don't need a template compiler so we can change to a runtime only
+ * build, which will result in a smaller app.js browser file.
+ * We can choose between vue.runtime.common.js (commonJS pattern) or vue.runtime.esm.js (ES Module pattern), either will work (as webpack will process them the same way)
+ * however to be consitent with our use of ES Modules we'll go with vue.runtime.esm.js
+ * 
+ * To override Mix's default add the following lines.
+ * our app.js file reduced to 272kb from 350kb  */
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            'vue$': 'vue/dist/vue.runtime.esm.js'
+        }
+    }
+});
+
+

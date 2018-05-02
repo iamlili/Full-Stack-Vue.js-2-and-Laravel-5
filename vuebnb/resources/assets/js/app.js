@@ -3,41 +3,20 @@
 import Vue from 'vue';
 //import sample from './data'; /* While Laravel has opted to use CommonJS syntax for including modules, that is require, we will use native ES module syntax, that is import. This is because ES modules are making their way into the JavaScript standard, and it's more consistent with the syntax used by Vue. */
 import "core-js/fn/object/assign";
-import { populateAmenitiesAndPrices } from './helpers'; // we import a helper function to structure the model (from the database) into the format we want, ie amenities and prices as arrays (as per original object from data.js file)
 
-let model = JSON.parse(window.vuebnb_listing_model);
-model = populateAmenitiesAndPrices(model);
+import ListingPage from '../components/ListingPage';
 
-import HeaderImage from '../components/HeaderImage.vue';
-import ImageCarousel from '../components/ImageCarousel.vue';
-import ModalWindow from '../components/ModalWindow.vue';
-import FeatureList from '../components/FeatureList.vue';
-import ExpandableText from '../components/ExpandableText.vue';
+/* in order for Vue to render components to a page, it transforms the template string into a JS object using it's internal template compiler library.
+ * After that it's able to interface with the DOM to synchronize the page with the state of the component.
+ * Instead of supplying a template string you could supply a 'render' function (to generate a semantically equivalent template)
+ * Render functions are more efficient as they don't require Vue to compile the template string first, however not as easy to create and work with
+ * 
+ * Luckily Webpack via 'Vue Loader' is already transforming our Single File Componenets into render functions during the build process, as can be seen in the built app.js file
+ * 
+ * The only thing that's still being compiled is our app's root element (ie the content between #app container), which still requires the Vue template compiler (just like any other template string)
+ * However we can abstract this template into another SFC (ie ListingPage.vue), meaning in the end: all our app templates will be built as render functions so we wont be invoking the compiler at all during runtime */
 
 var app = new Vue({
     el: '#app',
-
-    /* Instead of manually assigning the properties below with the same name from another object
-    we can use Object.assign and merge the two objects. Then add a pollyfill to ensure code will run in old browsers, by installing the core-js dependency, a library of polyfills */
-    data: Object.assign(model, {
-        
-    }),
-
-    components: {
-        HeaderImage,
-        ModalWindow,
-        ImageCarousel,
-        FeatureList,
-        ExpandableText
-    },
-
-    /* Now that we've decoupled the modal window from the main app, we need a method of sending data from the main app to the component to open the modal ie. when we click on the header image
-     * An 'event' won't work, as events can only flow up (to parents), not down.
-     * Instead we use a 'ref'. A special property allowing you to reference a child component's data. To use it: declare it on the component declaration markup and assign a unique value. Now the root instance has access to this specific components data via the $refs object eg. $refs.uniquevalue
-     * note: it is anti-pattern to user ref when the other normal methods of interacting are sufficient. Ref is only required for communicating with elements that fall outside of the normal flow of a page, as a modal does */
-    methods: {
-        openModal() {
-            this.$refs.imagemodal.modalOpen = true;
-        }
-    }
+    render: h => h(ListingPage)
 });
