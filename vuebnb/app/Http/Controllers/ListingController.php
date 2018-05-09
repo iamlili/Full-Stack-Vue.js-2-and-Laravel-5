@@ -25,6 +25,10 @@ class ListingController extends Controller
         return response()->json($model); //create an instance of the Response class by calling the response helper. We use the json; method and pass in our array of fields, returning the result.
     }
 
+    public function get_home_web(){
+        return view('app', ['model' => []]);
+    }
+
     public function get_listing_web(Listing $listing){
         $model = $listing->toArray();
         $model = $this->add_image_urls($model, $listing->id);

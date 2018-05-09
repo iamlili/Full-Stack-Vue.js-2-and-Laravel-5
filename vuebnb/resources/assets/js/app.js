@@ -4,7 +4,10 @@ import Vue from 'vue';
 //import sample from './data'; /* While Laravel has opted to use CommonJS syntax for including modules, that is require, we will use native ES module syntax, that is import. This is because ES modules are making their way into the JavaScript standard, and it's more consistent with the syntax used by Vue. */
 import "core-js/fn/object/assign";
 
-import ListingPage from '../components/ListingPage';
+import router from './router';
+
+import App from '../components/App.vue'
+
 
 /* in order for Vue to render components to a page, it transforms the template string into a JS object using it's internal template compiler library.
  * After that it's able to interface with the DOM to synchronize the page with the state of the component.
@@ -18,5 +21,6 @@ import ListingPage from '../components/ListingPage';
 
 var app = new Vue({
     el: '#app',
-    render: h => h(ListingPage)
+    render: h => h(App),
+    router
 });

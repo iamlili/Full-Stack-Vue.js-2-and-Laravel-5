@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
   <link rel="stylesheet" href="{{ asset('css/vue-style.css') }}" type="text/css">  
   <script type="text/javascript">
-      //console.log({{ $model[ 'id' ] }});
 
       {{-- Get data from the backend into the frontend by injecting it in the head --}}
 
@@ -30,10 +29,7 @@
   </script>
 </head>
 <body>
-<div id="toolbar">
-  <img class="icon" src="{{ asset('images/logo.png') }}">
-  <h1>vuebnb</h1>
-</div>
+
 <div id="app"> {{--
   <listing-page></listing-page> {{-- We don't want to do this, as it will still need to be compiled, we are trying to elimate the need for compiling so we will leave #app empty
                                   -- and we will declare a render function in app.js --}}
