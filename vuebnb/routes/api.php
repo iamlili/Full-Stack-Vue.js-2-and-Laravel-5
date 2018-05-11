@@ -22,3 +22,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // });
 
 Route::get('listing/{listing}', 'ListingController@get_listing_api');
+
+Route::get('/', 'ListingController@get_home_api'); // we need to ajax for new data when we switch between our Vue Routes (to update the main data that was initially injected in the)

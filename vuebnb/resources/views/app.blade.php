@@ -13,7 +13,7 @@
 
       {{-- Get data from the backend into the frontend by injecting it in the head --}}
 
-      window.vuebnb_listing_model = "{!! addslashes(json_encode($model)) !!}";
+      window.vuebnb_server_data = "{!! addslashes(json_encode($data)) !!}";
       
       {{--  
         addslashes function will add backslashes before chars that need to be escaped. Its necessary because the javascript JSON parser doesn't know which quotes are part of the javascript syntax and which are a part of the JSON object

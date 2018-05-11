@@ -43,8 +43,8 @@
 
     import { populateAmenitiesAndPrices } from '../js/helpers'; // we import a helper function to structure the model (from the database) into the format we want, ie amenities and prices as arrays (as per original object from data.js file)
 
-    let model = JSON.parse(window.vuebnb_listing_model);
-    model = populateAmenitiesAndPrices(model);
+    let serverData = JSON.parse(window.vuebnb_server_data);
+    let model = populateAmenitiesAndPrices(serverData.listing);
 
     import HeaderImage from './HeaderImage.vue';
     import ImageCarousel from './ImageCarousel.vue';
