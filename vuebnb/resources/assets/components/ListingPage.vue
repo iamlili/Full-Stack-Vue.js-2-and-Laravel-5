@@ -1,7 +1,7 @@
 <template>
     <div>
         <header-image v-bind:image-url="images[0]" @header-clicked="openModal" v-if="images[0]"></header-image><!-- we added a v-if, because now our data images array is initially empty when the component first gets rendered, so images[0] doesn't exisit, giving us a js 404 not found error in the console (the page still loads because the images array eventually gets populated). So to prevent the 404 we added the v-if to prevent the header-image from rendering until we have images[0] -->
-        <div class="container">
+        <div class="listing-container">
             <div class="heading">
 
             <!-- When Blade processes this, it will think the double curly brackets are its own syntax and will generate a PHP error as neither title nor address are defined functions.
