@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-image v-bind:image-url="images[0]" @header-clicked="openModal"></header-image>
+        <header-image v-bind:image-url="images[0]" @header-clicked="openModal" v-if="images[0]"></header-image><!-- we added a v-if, because now our data images array is initially empty when the component first gets rendered, so images[0] doesn't exisit, giving us a js 404 not found error in the console (the page still loads because the images array eventually gets populated). So to prevent the 404 we added the v-if to prevent the header-image from rendering until we have images[0] -->
         <div class="container">
             <div class="heading">
 
@@ -43,8 +43,11 @@
 
     import { populateAmenitiesAndPrices } from '../js/helpers'; // we import a helper function to structure the model (from the database) into the format we want, ie amenities and prices as arrays (as per original object from data.js file)
 
-    let serverData = JSON.parse(window.vuebnb_server_data);
-    let model = populateAmenitiesAndPrices(serverData.listing);
+    import routeMixin from '../js/route-mixin'; // mixins store functionality common between components. A mixin is an object like a component object. To use it declare it in an array assigned to the component config property 'mixin'. When the component in instantiated, any mixins will be merged with what else is in the component
+
+    /* These lines of functionality moved to assignData method below which is triggered from Route navigation guard merged into this compoenent from routeMixin file */
+    // let serverData = JSON.parse(window.vuebnb_server_data);
+    // let model = populateAmenitiesAndPrices(serverData.listing);
 
     import HeaderImage from './HeaderImage.vue';
     import ImageCarousel from './ImageCarousel.vue';
@@ -54,9 +57,14 @@
 
     export default {
         data(){
-            /* Instead of manually assigning the properties below with the same name from another object
-            we can use Object.assign and merge the two objects. Then add a pollyfill to ensure code will run in old browsers, by installing the core-js dependency, a library of polyfills */
-            return Object.assign(model, {  })
+            return {
+                title: null,
+                about: null,
+                address: null,
+                amenities: [],
+                prices: [],
+                images: []
+            }
         },
 
         components: {
@@ -66,6 +74,7 @@
             FeatureList,
             ExpandableText
         },
+        mixins: [ routeMixin ],
 
         /* Now that we've decoupled the modal window from the main app, we need a method of sending data from the main app to the component to open the modal ie. when we click on the header image
         * An 'event' won't work, as events can only flow up (to parents), not down.
@@ -74,6 +83,15 @@
         methods: {
             openModal() {
                 this.$refs.imagemodal.modalOpen = true;
+            },
+            assignData({ listing }){ // this method is used from our routeMixin
+                console.log("assigning data in ListingPage component");
+                // let serverData = JSON.parse(window.vuebnb_server_data);
+                // let model = populateAmenitiesAndPrices(listing);
+
+                /* Instead of manually assigning the properties below with the same name from another object
+                we can use Object.assign and merge the two objects. Then add a pollyfill to ensure code will run in old browsers, by installing the core-js dependency, a library of polyfills */
+                Object.assign(this.$data, populateAmenitiesAndPrices(listing));
             }
         }
     }
