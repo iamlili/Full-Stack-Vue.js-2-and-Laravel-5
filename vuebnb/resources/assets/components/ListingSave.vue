@@ -1,0 +1,56 @@
+<template>
+    <div class="listing-save" @click.stop="toggleSaved()">
+        <button v-if="button"><i :class="classes"></i>{{ message }}</button>    <!-- Display as a button so it's more visable -->
+        <i v-else :class="classes" ></i>        <!-- Display as a 'heart' -->
+    </div>
+</template>
+
+<script>
+export default {
+    props: ['id', 'button'],
+    methods: {
+        toggleSaved(){
+            this.$store.commit('toggleSaved', this.id); // use 'commit' tp perform the 'toggleSaved 'mutation' function in the store (while sending the id as the payload)
+        }
+    },
+    computed: { /* Vues store state should generally be retrieved with a computed variable, ensuring the component is not storing its our copy - which goes against the Flux architecture principle (which Vuex is based on) of only having a 'single source of truth' */
+        isListingSaved() {
+            return this.$store.state.saved.find(saved => saved === this.id);
+        },
+        classes() {
+            let saved = this.isListingSaved;
+            return {
+             'fa': true,
+             'fa-lg': true,
+             'fa-heart': saved,
+             'fa-heart-o': !saved
+            }
+        },
+        message() {
+           return this.isListingSaved ? 'Saved' : 'Save';
+        }
+    }
+}
+</script>
+
+<style>
+    .listing-save {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+    }
+    .listing-save .fa-heart-o {
+       color: #ffffff;
+    }
+    .listing-save .fa-heart {
+       color: #ff5a5f;
+    }
+    .listing-save i {
+       padding-right: 4px;
+    }
+    .listing-save button .fa-heart-o {
+       color: #808080;
+    }
+</style>
+
