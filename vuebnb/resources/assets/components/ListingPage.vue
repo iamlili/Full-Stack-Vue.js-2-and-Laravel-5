@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-image v-bind:image-url="images[0]" @header-clicked="openModal" v-if="images[0]" :id="id"></header-image><!-- we added a v-if, because now our data images array is initially empty when the component first gets rendered, so images[0] doesn't exisit, giving us a js 404 not found error in the console (the page still loads because the images array eventually gets populated). So to prevent the 404 we added the v-if to prevent the header-image from rendering until we have images[0] -->
+        <header-image v-bind:image-url="listing.images[0]" @header-clicked="openModal" v-if="listing.images[0]" :id="listing.id"></header-image><!-- we added a v-if, because now our data images array is initially empty when the component first gets rendered, so images[0] doesn't exisit, giving us a js 404 not found error in the console (the page still loads because the images array eventually gets populated). So to prevent the 404 we added the v-if to prevent the header-image from rendering until we have images[0] -->
         <div class="listing-container">
             <div class="heading">
 
@@ -10,16 +10,16 @@
                 - adding the @ infront of the variable eg @{{variablename}}, told blade that they a 'vue' variables, and not treat them as php blade variables
                 - We have removed all the @ as now this template is in it's own vue file  -->
 
-            <h1>{{ title }}</h1>
-            <p>{{ address }}</p>
+            <h1>{{ listing.title }}</h1>
+            <p>{{ listing.address }}</p>
             </div>
         ￼￼    <hr>
             <div class="about">
             <h3>About this listing</h3>
-            <expandable-text>{{ about }}</expandable-text>
+            <expandable-text>{{ listing.about }}</expandable-text>
             </div>
             <div class="lists">
-            <feature-list title="Amenities" v-bind:items="amenities">
+            <feature-list title="Amenities" v-bind:items="listing.amenities">
                 <!-- Scoped Slots allow us to pass in this template. The template will have access to any props in the child.
                 eg amenity (in the lines below) is an alias object (we can call it anything) It will be an alias of 'item' from our component list item loop -->
                 <template slot-scope="amenity">
@@ -27,7 +27,7 @@
                     <span>{{ amenity.title }}</span>
                 </template>
             </feature-list>
-            <feature-list title="Prices" :items="prices" >
+            <feature-list title="Prices" :items="listing.prices" >
                 <template slot-scope="price">
                     {{ price.title }}: <strong>{{ price.value }}</strong>
                 </template>
@@ -35,7 +35,7 @@
             </div>
         </div>
         <modal-window ref="imagemodal"> <!-- 'ref' is a special property allowing you to reference a child component's data. To use it: declare it and assign a unique value. Now the root instance has access to this specific ModalWindow components data via the $refs object. -->
-            <image-carousel v-bind:images="images"></image-carousel> <!-- Note: image-carousel is a sibling of modal-window (not a child) because of the use of the slot -->
+            <image-carousel v-bind:images="listing.images"></image-carousel> <!-- Note: image-carousel is a sibling of modal-window (not a child) because of the use of the slot -->
         </modal-window>
     </div>
 </template>
@@ -43,7 +43,7 @@
 
     import { populateAmenitiesAndPrices } from '../js/helpers'; // we import a helper function to structure the model (from the database) into the format we want, ie amenities and prices as arrays (as per original object from data.js file)
 
-    import routeMixin from '../js/route-mixin'; // mixins store functionality common between components. A mixin is an object like a component object. To use it declare it in an array assigned to the component config property 'mixin'. When the component in instantiated, any mixins will be merged with what else is in the component
+    //import routeMixin from '../js/route-mixin'; // mixins store functionality common between components. A mixin is an object like a component object. To use it declare it in an array assigned to the component config property 'mixin'. When the component in instantiated, any mixins will be merged with what else is in the component
 
     /* These lines of functionality moved to assignData method below which is triggered from Route navigation guard merged into this compoenent from routeMixin file */
     // let serverData = JSON.parse(window.vuebnb_server_data);
@@ -68,6 +68,19 @@
             }
         },
 
+        computed: {
+            listing(){
+                /* We had these lines before we moved the functionality into our Store getter getListing */
+                // let listing = this.$store.state.listings.find(listing => {
+                //     return listing.id == this.$route.params.listing
+                // });
+                // return populateAmenitiesAndPrices(listing);
+                return populateAmenitiesAndPrices(
+                    this.$store.getters.getListing(this.$route.params.listing)
+                );
+            }
+        },
+
         components: {
             HeaderImage,
             ModalWindow,
@@ -75,7 +88,7 @@
             FeatureList,
             ExpandableText
         },
-        mixins: [ routeMixin ],
+        //mixins: [ routeMixin ],
 
         /* Now that we've decoupled the modal window from the main app, we need a method of sending data from the main app to the component to open the modal ie. when we click on the header image
         * An 'event' won't work, as events can only flow up (to parents), not down.
@@ -85,15 +98,15 @@
             openModal() {
                 this.$refs.imagemodal.modalOpen = true;
             },
-            assignData({ listing }){ // this method is used from our routeMixin
-                console.log("assigning data in ListingPage component");
-                // let serverData = JSON.parse(window.vuebnb_server_data);
-                // let model = populateAmenitiesAndPrices(listing);
+            // assignData({ listing }){ // this method is used from our routeMixin
+            //     console.log("assigning data in ListingPage component");
+            //     // let serverData = JSON.parse(window.vuebnb_server_data);
+            //     // let model = populateAmenitiesAndPrices(listing);
 
-                /* Instead of manually assigning the properties below with the same name from another object
-                we can use Object.assign and merge the two objects. Then add a pollyfill to ensure code will run in old browsers, by installing the core-js dependency, a library of polyfills */
-                Object.assign(this.$data, populateAmenitiesAndPrices(listing));
-            }
+            //     /* Instead of manually assigning the properties below with the same name from another object
+            //     we can use Object.assign and merge the two objects. Then add a pollyfill to ensure code will run in old browsers, by installing the core-js dependency, a library of polyfills */
+            //     Object.assign(this.$data, populateAmenitiesAndPrices(listing));
+            // }
         }
     }
 </script>
